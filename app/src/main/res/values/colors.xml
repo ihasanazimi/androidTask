@@ -7,11 +7,12 @@
     <color name="white_alpha_2">#4AFFFFFF</color>
     <color name="gray">#737373</color>
     <color name="gray2">#BFBFBF</color>
+    <color name="gray3">#979797</color>
     <color name="white">#FFFFFF</color>
     <color name="white2">#FAFBFF</color>
     <color name="dark">#292929</color>
     <color name="yellow">#fbc531</color>
-    <color name="orang">#D86E11</color>
+    <color name="orange">#D86E11</color>
     <color name="red">#C35148</color>
     <color name="darkBlue">#283749</color>
     <color name="darkBlueAlpha">#6A222F3E</color>
@@ -20,7 +21,6 @@
     <color name="greenReal">#4CAF50</color>
     <color name="greenDark">#0785AC</color>
     <color name="greenAlpha">#B00785AC</color>
-    <color name="tusi">#979797</color>
     <color name="black_alpha">#1B000000</color>
     <color name="black_alpha_deep">#05171717</color>
     <color name="color_primary_dark_alpha">#113F02B5</color>
@@ -34,6 +34,4 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-
-
 </resources>
