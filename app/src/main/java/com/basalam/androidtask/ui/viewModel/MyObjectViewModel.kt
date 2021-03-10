@@ -11,7 +11,7 @@ import retrofit2.Response
 
 class MyObjectViewModel : ViewModel() {
 
-    var myLiveData = MutableLiveData<List<MyPojo>>()
+    private var myLiveData = MutableLiveData<List<MyPojo>>()
 
     fun getAllObjects(errorListening: OnError): LiveData<List<MyPojo>> {
         Api.invoke().allObjects().enqueue(object : Callback<List<MyPojo>> {
@@ -21,7 +21,7 @@ class MyObjectViewModel : ViewModel() {
 
 
             override fun onFailure(call: Call<List<MyPojo>>, t: Throwable) {
-                errorListening.onErrorEvent()
+                errorListening.onErrorEventInRequest()
             }
         })
         return myLiveData
@@ -29,7 +29,9 @@ class MyObjectViewModel : ViewModel() {
 
 
     interface OnError {
-        fun onErrorEvent()
+        fun onErrorEventInRequest()
     }
+
+
 
 }

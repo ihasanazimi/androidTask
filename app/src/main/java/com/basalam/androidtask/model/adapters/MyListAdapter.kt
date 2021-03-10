@@ -1,7 +1,7 @@
 package com.basalam.androidtask.model.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.basalam.androidtask.R
 import com.basalam.androidtask.databinding.RowListBinding
 import com.basalam.androidtask.model.MyPojo
-import java.util.ArrayList
+import com.bumptech.glide.Glide
+import java.util.*
 
-class MyListAdapter(var list: ArrayList<MyPojo>, val callBack: RecyclerViewEventListener) :
+class MyListAdapter(var list: ArrayList<MyPojo>, private val callBack: RecyclerViewEventListener) :
     RecyclerView.Adapter<MyListAdapter.VH>() {
 
     private lateinit var item: RowListBinding
@@ -28,15 +29,18 @@ class MyListAdapter(var list: ArrayList<MyPojo>, val callBack: RecyclerViewEvent
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        item.rowItem = list[position]
 
+        // binding to rows
+        holder.bind(list[position])
+
+        // item click listener
         holder.itemView.setOnClickListener {
-            callBack.onClickItem(list[position])
+            callBack.onClickItem(list[position] , position)
         }
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return list.size //return item count
     }
 
 
@@ -57,7 +61,7 @@ class MyListAdapter(var list: ArrayList<MyPojo>, val callBack: RecyclerViewEvent
     }
 
 
-    fun setList(newList: List<MyPojo>) {
+    fun setNewList(newList: List<MyPojo>) {
         list.clear()
         list.addAll(newList)
         notifyDataSetChanged()
@@ -75,11 +79,26 @@ class MyListAdapter(var list: ArrayList<MyPojo>, val callBack: RecyclerViewEvent
     }
 
 
-    inner class VH(var binding: RowListBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class VH(binding: RowListBinding) : RecyclerView.ViewHolder(binding.root){
+
+        private val titleTv : TextView = binding.title
+        private val descriptionTv : TextView = binding.description
+        private val imageView : ImageView = binding.imageView
+
+
+        @SuppressLint("UseCompatLoadingForDrawables")
+        fun bind(pojo: MyPojo){
+            titleTv.text = pojo.title
+            descriptionTv.text = pojo.description
+            Glide.with(imageView.context).load(pojo.imageUrl)
+                .placeholder(imageView.context.resources.getDrawable(R.drawable.ic_picture,null)).into(imageView)
+        }
+
+    }
 
 
     interface RecyclerViewEventListener {
-        fun onClickItem(pojo: MyPojo)
+        fun onClickItem(pojo: MyPojo , position: Int)
     }
 
 }

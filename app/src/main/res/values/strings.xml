@@ -2,4 +2,5 @@
     <string name="app_name">Android Task</string>
     <string name="string_des">this is description</string>
     <string name="string_add_item">Add Item</string>
+    <string name="string_loading">در حال بارگذاری...</string>
 </resources>

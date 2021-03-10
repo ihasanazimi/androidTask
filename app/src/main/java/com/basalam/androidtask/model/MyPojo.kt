@@ -27,8 +27,6 @@ data class MyPojo (
     @SerializedName("ImageUrl")
     var imageUrl: String
 
-
-
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readLong(),

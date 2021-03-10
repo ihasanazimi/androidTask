@@ -3,18 +3,16 @@ package com.basalam.androidtask.network
 import com.basalam.androidtask.model.MyPojo
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
 
 interface Api {
 
+    @Headers("")
     @GET("")
     fun allObjects() : Call<List<MyPojo>>
-
-
-
-
 
 
     companion object {
@@ -22,7 +20,6 @@ interface Api {
         operator fun invoke(): Api {
             return Retrofit.Builder()
                 .baseUrl(baserUrl)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(Api::class.java)
         }

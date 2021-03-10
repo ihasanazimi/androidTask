@@ -6,11 +6,17 @@ import com.basalam.androidtask.model.MyPojo
 @Dao
 interface MyDao {
 
+
     @Insert(onConflict =  OnConflictStrategy.REPLACE)
     fun insertObj(yourObject : MyPojo) : Long
 
     @Delete
     fun deleteObject(yourObject : MyPojo)
+
+    @Update
+    fun update(yourObject: MyPojo)
+
+
 
     @Query("SELECT * FROM MyPojo;")
     fun getAllObj() : List<MyPojo>
@@ -21,7 +27,6 @@ interface MyDao {
     @Query("Delete From MyPojo")
     fun deleteAll()
 
-    @Update
-    fun update(yourObject: MyPojo)
+
 
 }

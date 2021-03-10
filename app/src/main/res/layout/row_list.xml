@@ -2,15 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <data>
-
-        <variable
-            name="rowItem"
-            type="com.basalam.androidtask.model.MyPojo" />
-    </data>
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +13,6 @@
 
         <ImageView
             android:id="@+id/imageView"
-            image="@{rowItem.imageUrl}"
             android:layout_width="180dp"
             android:layout_height="160dp"
             android:layout_marginStart="8dp"
@@ -46,7 +36,6 @@
                 android:maxLines="2"
                 android:paddingStart="@dimen/space8"
                 android:paddingEnd="@dimen/space8"
-                android:text="@{rowItem.title}"
                 android:textColor="@android:color/black"
                 android:textDirection="rtl"
                 android:textSize="@dimen/txtSize16"
@@ -62,7 +51,6 @@
                 android:paddingStart="@dimen/space8"
                 android:paddingTop="@dimen/space8"
                 android:paddingEnd="@dimen/space8"
-                android:text="@{rowItem.description}"
                 android:textDirection="rtl"
                 tools:targetApi="o"
                 tools:text="این متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنوان" />
