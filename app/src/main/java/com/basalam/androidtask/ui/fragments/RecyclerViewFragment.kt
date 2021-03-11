@@ -9,6 +9,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.basalam.androidtask.R
@@ -22,10 +23,11 @@ import com.basalam.androidtask.utils.App
 import com.basalam.androidtask.utils.MyFactory
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.ArrayList
 
-class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener,
-    MyObjectViewModel.OnError {
+class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener{
 
     lateinit var binding: RecyclerviewFragmentBinding
     private lateinit var recyclerview: RecyclerView
@@ -33,14 +35,19 @@ class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener
     private lateinit var searchView: SearchView
     private lateinit var rootContainer: CoordinatorLayout
     private lateinit var adapter: MyListAdapter
-    private lateinit var loadingDialog : LoadingDialog
-    private lateinit var myViewModel : MyObjectViewModel
-    private lateinit var repository : Rep
+    private lateinit var loadingDialog: LoadingDialog
+    private lateinit var myViewModel: MyObjectViewModel
+    private lateinit var repository: Rep
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
         // inflate OR create fragment view //
-        binding = DataBindingUtil.inflate(inflater, R.layout.recyclerview_fragment, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.recyclerview_fragment, container, false)
 
         init()
 
@@ -58,18 +65,24 @@ class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener
     }
 
     private fun request() {
-        myViewModel.getAllObjects(this).observe(viewLifecycleOwner, { responseList ->
-            updateUi(responseList as ArrayList<MyPojo>)
-            loadingDialog.dismiss() // hide loading dialog
-            repository.insertAll(responseList) // save in DB
-        })
+        lifecycleScope.launchWhenCreated {
+            myViewModel.getAllObjects()
+                .observe(viewLifecycleOwner, { responseList ->
+                    updateUi(responseList as ArrayList<MyPojo>)
+                    loadingDialog.dismiss() // hide loading dialog
+                    repository.insertAll(responseList) // save in DB
+                })
+        }
     }
 
 
     private fun init() {
 
         // initialize viewModel
-        myViewModel = ViewModelProvider(requireActivity(), MyFactory(App())).get(MyObjectViewModel::class.java)
+        myViewModel = ViewModelProvider(
+            requireActivity(),
+            MyFactory(App())
+        ).get(MyObjectViewModel::class.java)
 
         repository = Rep(requireContext())
 
@@ -83,11 +96,11 @@ class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener
         // loading dialog initialize
         loadingDialog = LoadingDialog()
         loadingDialog.isCancelable = false
-        loadingDialog.show(requireActivity().supportFragmentManager,null) // SHOW DIALOG
+        loadingDialog.show(requireActivity().supportFragmentManager, null) // SHOW DIALOG
 
     }
 
-    private fun setUpRecyclerView(){
+    private fun setUpRecyclerView() {
         val fakeList = arrayListOf<MyPojo>()
         val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         recyclerview.layoutManager = layoutManager
@@ -100,18 +113,18 @@ class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener
     }
 
 
-
     //adapter event listener
-    override fun onClickItem(pojo: MyPojo ,position : Int) {
+    override fun onClickItem(pojo: MyPojo, position: Int) {
         TODO("Not yet implemented")
     }
 
-    // request error listener
-    override fun onErrorEventInRequest() {
-        val snackBar = Snackbar.make(rootContainer,"خطا در ارتباط با سرور",Snackbar.LENGTH_INDEFINITE)
-        snackBar.setAction("تلاش مجدد"){
-            loadingDialog.show(requireActivity().supportFragmentManager,null) // SHOW DIALOG
-            request()
-        }
-    }
 }
+
+//    val snackBar =
+//        Snackbar.make(rootContainer, "خطا در ارتباط با سرور", Snackbar.LENGTH_INDEFINITE)
+//    snackBar.setAction("تلاش مجدد") {
+//        loadingDialog.show(requireActivity().supportFragmentManager, null) // SHOW DIALOG
+//        request()
+//    }
+
+

@@ -12,7 +12,7 @@ interface Api {
 
     @Headers("")
     @GET("")
-    fun allObjects() : Call<List<MyPojo>>
+    suspend fun allObjects() : List<MyPojo>
 
 
     companion object {
