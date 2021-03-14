@@ -1,22 +1,20 @@
 package com.basalam.androidtask.network
 
 import com.basalam.androidtask.model.MyPojo
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
+import retrofit2.http.*
 
 interface Api {
 
-    @Headers("")
-    @GET("")
-    suspend fun allObjects() : List<MyPojo>
+    //    https://jsonplaceholder.typicode.com/photos?albumid=1
+
+    @GET("photos")
+    suspend fun allObjects(@Query("albumid") albumId : Int) : List<MyPojo>
 
 
     companion object {
-        private const val baserUrl = " ...... "
+        private const val baserUrl = "https://jsonplaceholder.typicode.com/"
         operator fun invoke(): Api {
             return Retrofit.Builder()
                 .baseUrl(baserUrl)

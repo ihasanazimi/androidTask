@@ -5,31 +5,29 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 
 @Entity
-data class MyPojo (
+data class MyPojo(
 
     @ColumnInfo(name = "uid")
     @PrimaryKey
-    @SerializedName("id")
-    var id: Long = 0,
-
-    @ColumnInfo(name = "Title")
-    @SerializedName("Title")
+    var uid: Long,
+    @ColumnInfo(name = "albumId")
+    var albumId: Int,
+    @ColumnInfo(name = "id")
+    var id: Int,
+    @ColumnInfo(name = "title")
     var title: String,
+    @ColumnInfo(name = "url")
+    var url: String,
+    @ColumnInfo(name = "thumbnailUrl")
+    var thumbnailUrl: String,
 
-    @ColumnInfo(name = "Description")
-    @SerializedName("Description")
-    var description: String,
-
-    @ColumnInfo(name = "ImageUrl")
-    @SerializedName("ImageUrl")
-    var imageUrl: String
-
-) : Parcelable {
+    ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
+        parcel.readInt(),
+        parcel.readInt(),
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString()
@@ -37,10 +35,12 @@ data class MyPojo (
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeLong(id)
+        parcel.writeLong(uid)
+        parcel.writeInt(albumId)
+        parcel.writeInt(id)
         parcel.writeString(title)
-        parcel.writeString(description)
-        parcel.writeString(imageUrl)
+        parcel.writeString(url)
+        parcel.writeString(thumbnailUrl)
     }
 
     override fun describeContents(): Int {

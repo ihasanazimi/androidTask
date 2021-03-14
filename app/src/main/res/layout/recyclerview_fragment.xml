@@ -7,7 +7,7 @@
         android:id="@+id/rootContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layoutDirection="rtl">
+        android:layoutDirection="ltr">
 
 
         <com.google.android.material.appbar.AppBarLayout
@@ -48,15 +48,21 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/SwipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:nestedScrollingEnabled="false"
-            android:padding="8dp"
-            android:requiresFadingEdge="vertical"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" >
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="true"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab"

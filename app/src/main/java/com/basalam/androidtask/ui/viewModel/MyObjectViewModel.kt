@@ -15,18 +15,18 @@ import java.io.IOException
 class MyObjectViewModel : ViewModel() {
 
     private var listLiveData = MutableLiveData<List<MyPojo>>()
-    private var errorLiveData = MutableLiveData<String>()
+    var errorLiveData = MutableLiveData<String>()
 
     private val errorScope = CoroutineExceptionHandler { coroutineContext, throwable ->
         errorLiveData.value = throwable.message
-        Log.i("ERRORMSG", "ERRORMSG: " + throwable.message)
+        Log.i("MyErrorMsg", "MyErrorMsg: " + throwable.message)
     }
 
-     fun getAllObjects() : LiveData<List<MyPojo>> {
+     fun getAllObjects(albumId : Int) : LiveData<List<MyPojo>> {
 
          try {
              viewModelScope.launch(Dispatchers.Main + errorScope) {
-                 val list = Api.invoke().allObjects()
+                 val list = Api.invoke().allObjects(albumId)
                  listLiveData.value = list
              }
          }catch (ex : IOException){
@@ -34,11 +34,6 @@ class MyObjectViewModel : ViewModel() {
          }
 
          return listLiveData
-    }
-
-
-    interface OnError {
-        fun onErrorEventInRequest(message : String)
     }
 
 }

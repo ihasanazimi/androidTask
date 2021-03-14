@@ -35,7 +35,7 @@ class MyListAdapter(var list: ArrayList<MyPojo>, private val callBack: RecyclerV
 
         // item click listener
         holder.itemView.setOnClickListener {
-            callBack.onClickItem(list[position] , position)
+            callBack.onClickItem(list[position], position)
         }
     }
 
@@ -68,10 +68,10 @@ class MyListAdapter(var list: ArrayList<MyPojo>, private val callBack: RecyclerV
     }
 
 
-    fun updateItem(pojo: MyPojo){
-        for (i in 0 until list.size){
+    fun updateItem(pojo: MyPojo) {
+        for (i in 0 until list.size) {
             if (list[i].id == pojo.id) {
-                list.set(i , pojo)
+                list.set(i, pojo)
                 notifyItemChanged(i)
                 break
             }
@@ -79,26 +79,22 @@ class MyListAdapter(var list: ArrayList<MyPojo>, private val callBack: RecyclerV
     }
 
 
-    inner class VH(binding: RowListBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class VH(binding: RowListBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private val titleTv : TextView = binding.title
-        private val descriptionTv : TextView = binding.description
-        private val imageView : ImageView = binding.imageView
+        private val titleTv: TextView = binding.title
+        private val imageView: ImageView = binding.imageView
 
 
-        @SuppressLint("UseCompatLoadingForDrawables")
-        fun bind(pojo: MyPojo){
+        fun bind(pojo: MyPojo) {
             titleTv.text = pojo.title
-            descriptionTv.text = pojo.description
-            Glide.with(imageView.context).load(pojo.imageUrl)
-                .placeholder(imageView.context.resources.getDrawable(R.drawable.ic_picture,null)).into(imageView)
-        }
 
+            Glide.with(titleTv.context).load(pojo.thumbnailUrl).placeholder(R.drawable.ic_picture).dontAnimate().into(imageView);
+        }
     }
 
 
     interface RecyclerViewEventListener {
-        fun onClickItem(pojo: MyPojo , position: Int)
+        fun onClickItem(pojo: MyPojo, position: Int)
     }
 
 }

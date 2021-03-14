@@ -41,7 +41,7 @@ class Rep(var context: Context) {
         try {
             for (i in list) {
                 val uid = db.dao().insertObj(i)
-                i.id = uid
+                i.uid = uid
             }
         } catch (ex: IOException) {
             ex.printStackTrace()
@@ -53,7 +53,7 @@ class Rep(var context: Context) {
      */
     fun insertItemAndReturnUid(newItem: MyPojo): Long {
         val uid = db.dao().insertObj(newItem)
-        newItem.id = uid
+        newItem.uid = uid
         return uid
     }
 }

@@ -1,9 +1,12 @@
 package com.basalam.androidtask.ui.fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
@@ -12,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.basalam.androidtask.R
 import com.basalam.androidtask.databinding.RecyclerviewFragmentBinding
 import com.basalam.androidtask.model.MyPojo
@@ -23,11 +27,9 @@ import com.basalam.androidtask.utils.App
 import com.basalam.androidtask.utils.MyFactory
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.util.ArrayList
 
-class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener{
+class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener {
 
     lateinit var binding: RecyclerviewFragmentBinding
     private lateinit var recyclerview: RecyclerView
@@ -36,6 +38,7 @@ class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener
     private lateinit var rootContainer: CoordinatorLayout
     private lateinit var adapter: MyListAdapter
     private lateinit var loadingDialog: LoadingDialog
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var myViewModel: MyObjectViewModel
     private lateinit var repository: Rep
 
@@ -50,8 +53,14 @@ class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener
             DataBindingUtil.inflate(inflater, R.layout.recyclerview_fragment, container, false)
 
         init()
-
         setUpRecyclerView()
+
+        swipeRefreshLayout.setOnRefreshListener {
+            Handler(Looper.myLooper()!!).postDelayed(
+                { responseRequest() },
+                700
+            )
+        }
 
         return binding.root // return view
     }
@@ -60,19 +69,36 @@ class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener
         super.onViewCreated(view, savedInstanceState)
 
         // get data from server
-        request()
+        responseRequest()
+        errorObserver()
 
     }
 
-    private fun request() {
+    private fun responseRequest() {
+        swipeRefreshLayout.isRefreshing = true
+        loadingDialog.show(requireActivity().supportFragmentManager, null) // SHOW DIALOG
         lifecycleScope.launchWhenCreated {
-            myViewModel.getAllObjects()
+            myViewModel.getAllObjects(1) // send album Id
                 .observe(viewLifecycleOwner, { responseList ->
                     updateUi(responseList as ArrayList<MyPojo>)
                     loadingDialog.dismiss() // hide loading dialog
-                    repository.insertAll(responseList) // save in DB
+                    swipeRefreshLayout.isRefreshing = false
                 })
         }
+    }
+
+    private fun errorObserver() {
+        myViewModel.errorLiveData.observe(requireActivity(),{
+            if (it.isNotEmpty()){
+                loadingDialog.dismiss()
+                swipeRefreshLayout.isRefreshing = false
+                val snackBar = Snackbar.make(rootContainer, it, Snackbar.LENGTH_INDEFINITE)
+                snackBar.setAction("تلاش مجدد") {
+                    responseRequest()
+                }
+                snackBar.show()
+            }
+        })
     }
 
 
@@ -91,12 +117,13 @@ class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener
         recyclerview = binding.recyclerview
         floatActionBtn = binding.fab
         searchView = binding.searchView
+        swipeRefreshLayout = binding.SwipeRefreshLayout
+        swipeRefreshLayout.isRefreshing = true
 
 
         // loading dialog initialize
         loadingDialog = LoadingDialog()
         loadingDialog.isCancelable = false
-        loadingDialog.show(requireActivity().supportFragmentManager, null) // SHOW DIALOG
 
     }
 
@@ -115,16 +142,12 @@ class RecyclerViewFragment : Fragment(), MyListAdapter.RecyclerViewEventListener
 
     //adapter event listener
     override fun onClickItem(pojo: MyPojo, position: Int) {
-        TODO("Not yet implemented")
+        Snackbar.make(rootContainer, pojo.thumbnailUrl, Snackbar.LENGTH_LONG)
+            .show()
     }
 
 }
 
-//    val snackBar =
-//        Snackbar.make(rootContainer, "خطا در ارتباط با سرور", Snackbar.LENGTH_INDEFINITE)
-//    snackBar.setAction("تلاش مجدد") {
-//        loadingDialog.show(requireActivity().supportFragmentManager, null) // SHOW DIALOG
-//        request()
-//    }
+
 
 

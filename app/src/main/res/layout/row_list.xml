@@ -5,58 +5,37 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layoutDirection="rtl"
+        android:layoutDirection="ltr"
         android:paddingStart="@dimen/space12"
-        android:paddingBottom="@dimen/space12"
-        android:paddingEnd="@dimen/space12">
+        android:paddingEnd="@dimen/space12"
+        android:paddingBottom="@dimen/space12">
 
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="180dp"
-            android:layout_height="160dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/string_des" />
 
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/imageView"
             android:layout_toEndOf="@id/imageView"
-            android:orientation="vertical">
-
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start|top"
-                android:maxLines="2"
-                android:paddingStart="@dimen/space8"
-                android:paddingEnd="@dimen/space8"
-                android:textColor="@android:color/black"
-                android:textDirection="rtl"
-                android:textSize="@dimen/txtSize16"
-                android:textStyle="bold"
-                tools:text="این متن یک متن تستی می باشد برای عنوان" />
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start|top"
-                android:justificationMode="inter_word"
-                android:paddingStart="@dimen/space8"
-                android:paddingTop="@dimen/space8"
-                android:paddingEnd="@dimen/space8"
-                android:textDirection="rtl"
-                tools:targetApi="o"
-                tools:text="این متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنواناین متن یک متن تستی می باشد برای عنوان" />
-
-
-        </LinearLayout>
+            android:gravity="start|top"
+            android:maxLines="2"
+            android:paddingStart="@dimen/space8"
+            android:paddingTop="@dimen/space24"
+            android:paddingEnd="@dimen/space8"
+            android:textColor="@android:color/black"
+            android:textDirection="ltr"
+            android:textSize="@dimen/txtSize14"
+            android:textStyle="bold"
+            tools:text="این متن یک متن تستی می باشد برای عنوان" />
 
     </RelativeLayout>
 
